@@ -6,12 +6,16 @@ _nex_curl() {
 
 github_latest_release() {
     local repo="$1"
-    _nex_curl "${NEX_GITHUB_API}/repos/${repo}/releases/latest" | grep '"tag_name"' | head -1 | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/'
+    local response
+    response=$(_nex_curl "${NEX_GITHUB_API}/repos/${repo}/releases/latest")
+    echo "$response" | grep '"tag_name"' | head -1 | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/' || true
 }
 
 github_release_assets() {
     local repo="$1" tag="$2"
-    _nex_curl "${NEX_GITHUB_API}/repos/${repo}/releases/tags/${tag}" | grep '"browser_download_url"' | sed -E 's/.*"browser_download_url": *"([^"]+)".*/\1/'
+    local response
+    response=$(_nex_curl "${NEX_GITHUB_API}/repos/${repo}/releases/tags/${tag}")
+    echo "$response" | grep '"browser_download_url"' | sed -E 's/.*"browser_download_url": *"([^"]+)".*/\1/' || true
 }
 
 github_download() {
@@ -42,11 +46,13 @@ github_download_db() {
     tmp_file=$(mktemp)
 
     nex_msg info "Downloading package database..."
-    if ! wget -q -O "$tmp_file" "$url" 2>/dev/null && ! _nex_curl -o "$tmp_file" "$url" 2>/dev/null; then
-        rm -f "$tmp_file"
-        nex_die "Failed to download package database."
+    if ! wget -q -O "$tmp_file" "$url" 2>/dev/null; then
+        if ! _nex_curl -o "$tmp_file" "$url" 2>/dev/null; then
+            rm -f "$tmp_file"
+            nex_die "Failed to download package database."
+        fi
     fi
 
-    nex_sudo cp "$tmp_file" "$NEX_DB_FILE"
+    cp "$tmp_file" "$NEX_DB_FILE"
     rm -f "$tmp_file"
 }
