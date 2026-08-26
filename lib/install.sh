@@ -1,5 +1,43 @@
 #!/usr/bin/env bash
 
+_nex_install_desktop() {
+    local pkg="$1"
+    local desktop_name desktop_exec desktop_categories desktop_comment desktop_icon desktop_terminal
+
+    desktop_name=$(db_get_field "$pkg" "desktop_name")
+    desktop_exec=$(db_get_field "$pkg" "desktop_exec")
+    desktop_categories=$(db_get_field "$pkg" "desktop_categories")
+    desktop_comment=$(db_get_field "$pkg" "desktop_comment")
+    desktop_icon=$(db_get_field "$pkg" "desktop_icon")
+    desktop_terminal=$(db_get_field "$pkg" "desktop_terminal")
+
+    [[ -z "$desktop_name" || -z "$desktop_exec" ]] && return 0
+
+    local desktop_file="/usr/share/applications/${pkg}.desktop"
+
+    nex_msg info "Creating desktop entry..."
+    nex_sudo tee "$desktop_file" >/dev/null <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${desktop_name}
+Comment=${desktop_comment:-${desktop_name}}
+Icon=${desktop_icon:-${pkg}}
+Exec=${desktop_exec}
+Categories=${desktop_categories:-Utility;}
+Terminal=${desktop_terminal:-false}
+EOF
+}
+
+_nex_remove_desktop() {
+    local pkg="$1"
+    local desktop_file="/usr/share/applications/${pkg}.desktop"
+
+    if [[ -f "$desktop_file" ]]; then
+        nex_sudo rm -f "$desktop_file"
+    fi
+}
+
 nex_install() {
     local pkg="$1"
     [[ -z "$pkg" ]] && nex_die "Usage: nex install <package>"
@@ -53,6 +91,8 @@ nex_install() {
     nex_msg info "Installing $pkg..."
     nex_sudo pacman -U --noconfirm "$cache_dir/$asset" || nex_die "Failed to install '$pkg'."
 
+    _nex_install_desktop "$pkg"
+
     db_mark_managed "$pkg"
     nex_msg success "$pkg installed successfully."
 }
@@ -73,6 +113,7 @@ nex_remove() {
     nex_msg info "Removing $pkg..."
     nex_sudo pacman -R --noconfirm "$pkg" || nex_die "Failed to remove '$pkg'."
 
+    _nex_remove_desktop "$pkg"
     db_unmark_managed "$pkg"
     nex_msg success "$pkg removed successfully."
 }
@@ -93,6 +134,7 @@ nex_purge() {
     nex_msg info "Purging $pkg (including config files)..."
     nex_sudo pacman -Rns --noconfirm "$pkg" || nex_die "Failed to purge '$pkg'."
 
+    _nex_remove_desktop "$pkg"
     db_unmark_managed "$pkg"
     nex_msg success "$pkg purged successfully."
 }
@@ -104,6 +146,7 @@ nex_reinstall() {
     if pacman -Q "$pkg" &>/dev/null; then
         nex_msg info "Removing $pkg first..."
         nex_sudo pacman -Rns --noconfirm "$pkg" || nex_die "Failed to remove '$pkg'."
+        _nex_remove_desktop "$pkg"
     fi
 
     nex_install "$pkg"
@@ -112,7 +155,7 @@ nex_reinstall() {
 nex_autoremove() {
     nex_msg info "Finding unused dependencies..."
     local orphans
-    orphans=$(pacman -Qdtq 2>/dev/null)
+    orphans=$(pacman -Qdtq 2>/dev/null || true)
 
     if [[ -z "$orphans" ]]; then
         nex_msg success "No unused dependencies found."

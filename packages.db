@@ -1,6 +1,6 @@
 # nex package database
 # Format: key=value pairs, packages separated by empty line
-# version: v1.0.0
+# version: v0.1.0
 
 name=firefox
 desc=Standalone web browser from Mozilla
@@ -16,6 +16,12 @@ conflicts=firefox-developer-edition
 repo=nexuslinux-os/firefox-bin
 asset=firefox-131.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Firefox
+desktop_exec=firefox %U
+desktop_categories=Network;WebBrowser;
+desktop_comment=Browse the World Wide Web
+desktop_icon=firefox
+desktop_terminal=false
 
 name=code-oss
 desc=Visual Studio Code
@@ -29,6 +35,12 @@ depends=gconf|libnotify|nss|libxss|atk
 repo=nexuslinux-os/code-oss-bin
 asset=code-oss-1.93.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Visual Studio Code
+desktop_exec=code-oss %F
+desktop_categories=Development;IDE;
+desktop_comment=Code editing. Redefined.
+desktop_icon=code-oss
+desktop_terminal=false
 
 name=discord
 desc=All-in-one voice and text chat
@@ -42,6 +54,12 @@ depends=gtk3|libnotify|nss|libxss|alsa-lib|at-spi2-core
 repo=nexuslinux-os/discord-bin
 asset=discord-0.0.61-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Discord
+desktop_exec=discord %U
+desktop_categories=Network;InstantMessaging;
+desktop_comment=Talk, chat, hang out, and stay close with your friends and communities
+desktop_icon=discord
+desktop_terminal=false
 
 name=spotify
 desc=Music streaming service
@@ -55,6 +73,12 @@ depends=alsa-lib|gtk3|libnotify|nss|libxss|at-spi2-core
 repo=nexuslinux-os/spotify-bin
 asset=spotify-1.2.46-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Spotify
+desktop_exec=spotify %U
+desktop_categories=Audio;Music;Player;AudioVideo;
+desktop_comment=Music for everyone
+desktop_icon=spotify
+desktop_terminal=false
 
 name=obs-studio
 desc=Free and open source software for video recording and live streaming
@@ -68,6 +92,12 @@ depends=ffmpeg|qt6-base|vlc|jack2
 repo=nexuslinux-os/obs-studio-bin
 asset=obs-studio-30.2.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=OBS Studio
+desktop_exec=obs-studio %U
+desktop_categories=AudioVideo;Video;Recorder;
+desktop_comment=Free and Open Source Streaming/Recording Software
+desktop_icon=obs-studio
+desktop_terminal=false
 
 name=vlc
 desc=Multimedia player and framework
@@ -81,6 +111,12 @@ depends=qt5-base|libdvdnav|libdvdread|ffmpeg|aalib
 repo=nexuslinux-os/vlc-bin
 asset=vlc-3.0.21-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=VLC media player
+desktop_exec=vlc %U
+desktop_categories=AudioVideo;Audio;Video;Player;Recorder;
+desktop_comment=Read, stream, capture your media
+desktop_icon=vlc
+desktop_terminal=false
 
 name=google-chrome
 desc=Proprietary web browser by Google
@@ -94,6 +130,12 @@ depends=gtk3|nss|alsa-lib|at-spi2-core|libxss|libsecret
 repo=nexuslinux-os/google-chrome-bin
 asset=google-chrome-128.0.6613.113-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Google Chrome
+desktop_exec=google-chrome %U
+desktop_categories=Network;WebBrowser;
+desktop_comment=Access the Internet
+desktop_icon=google-chrome
+desktop_terminal=false
 
 name=telegram-desktop
 desc=Official Telegram Desktop client
@@ -107,6 +149,12 @@ depends=qt6-base|qt6-wayland|libtg_owt|openh264
 repo=nexuslinux-os/telegram-desktop-bin
 asset=telegram-desktop-5.5.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Telegram Desktop
+desktop_exec=telegram-desktop %U
+desktop_categories=Network;InstantMessaging;Chat;
+desktop_comment=Telegram Desktop
+desktop_icon=telegram-desktop
+desktop_terminal=false
 
 name=thunar
 desc=Modern, fast and easy to use file manager
@@ -120,6 +168,12 @@ depends=gtk3|libnotify|libexif|xfconf|libxfce4ui
 repo=nexuslinux-os/thunar-bin
 asset=thunar-4.18.10-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Thunar File Manager
+desktop_exec=thunar %U
+desktop_categories=System;FileTools;FileManager;
+desktop_comment=Manage your files
+desktop_icon=thunar
+desktop_terminal=false
 
 name=neovim
 desc=Vim-fork focused on extensibility and usability
@@ -146,6 +200,12 @@ depends=fontconfig|freetype2|libxcb|libxkbcommon|wayland
 repo=nexuslinux-os/alacritty-bin
 asset=alacritty-0.14.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=Alacritty
+desktop_exec=alacritty
+desktop_categories=System;TerminalEmulator;
+desktop_comment=A fast, cross-platform, OpenGL terminal emulator
+desktop_icon=Alacritty
+desktop_terminal=false
 
 name=kitty
 desc=GPU-based terminal emulator
@@ -159,6 +219,12 @@ depends=fontconfig|freetype2|libxcb|libxkbcommon|wayland|lcms2
 repo=nexuslinux-os/kitty-bin
 asset=kitty-0.36.0-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=kitty
+desktop_exec=kitty
+desktop_categories=System;TerminalEmulator;
+desktop_comment=A fast, featureful, GPU based terminal emulator
+desktop_icon=kitty
+desktop_terminal=false
 
 name=btop
 desc=Resource monitor
@@ -171,6 +237,12 @@ size=3000000
 repo=nexuslinux-os/btop-bin
 asset=btop-1.4.3-1-x86_64.pkg.tar.zst
 checksum=
+desktop_name=btop
+desktop_exec=btop
+desktop_categories=System;Monitor;
+desktop_comment=Resource monitor
+desktop_icon=btop
+desktop_terminal=true
 
 name=starship
 desc=Cross-shell prompt
