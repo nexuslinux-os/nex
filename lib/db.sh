@@ -30,7 +30,7 @@ db_list_installed() {
         while IFS= read -r pkg; do
             [[ -z "$pkg" ]] && continue
             local ver
-            ver=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')
+            ver=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}' || true)
             if [[ -n "$ver" ]]; then
                 echo -e "${BOLD}$pkg${RESET} $ver"
             fi
@@ -43,7 +43,7 @@ db_list_updates() {
     while IFS= read -r pkg; do
         [[ -z "$pkg" ]] && continue
         local installed
-        installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')
+        installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}' || true)
         [[ -z "$installed" ]] && continue
         new_ver=$(db_get_field "$pkg" "version")
         [[ -z "$new_ver" ]] && continue
@@ -73,7 +73,7 @@ db_show() {
     asset=$(db_get_field "$pkg" "asset")
 
     local installed
-    installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')
+    installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}' || true)
     [[ -z "$installed" ]] && installed="Not installed"
 
     echo -e "${BOLD}${CYAN}$pkg${RESET}"

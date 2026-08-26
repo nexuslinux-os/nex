@@ -1,25 +1,22 @@
 #!/usr/bin/env bash
 
-# System config or local config
+_nex_config_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_nex_default_conf="${_nex_config_dir}/../config/nex.conf"
+
+_nex_config_file=""
 if [[ -f "/etc/nex/nex.conf" ]]; then
     _nex_config_file="/etc/nex/nex.conf"
 elif [[ -f "${HOME}/.config/nex/nex.conf" ]]; then
     _nex_config_file="${HOME}/.config/nex/nex.conf"
-else
-    _nex_config_file="/etc/nex/nex.conf"
 fi
 
 nex_config_load() {
-    # Load defaults first
-    local default_conf
-    default_conf="$(dirname "${BASH_SOURCE[0]}")/../config/nex.conf"
-    if [[ -f "$default_conf" ]]; then
+    if [[ -f "$_nex_default_conf" ]]; then
         # shellcheck source=/dev/null
-        source "$default_conf"
+        source "$_nex_default_conf"
     fi
 
-    # Override with system/local config
-    if [[ -f "$_nex_config_file" ]]; then
+    if [[ -n "$_nex_config_file" && -f "$_nex_config_file" ]]; then
         # shellcheck source=/dev/null
         source "$_nex_config_file"
     fi

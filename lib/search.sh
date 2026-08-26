@@ -20,7 +20,7 @@ nex_search() {
         local desc version installed
         desc=$(db_get_field "$pkg" "desc")
         version=$(db_get_field "$pkg" "version")
-        installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')
+        installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}' || true)
 
         if [[ -n "$installed" ]]; then
             echo -e "  ${GREEN}✓${RESET} ${BOLD}$pkg${RESET} ${CYAN}$version${RESET}"
@@ -73,13 +73,13 @@ nex_list() {
             while IFS= read -r pkg; do
                 local version installed
                 version=$(db_get_field "$pkg" "version")
-                installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}')
+                installed=$(pacman -Q "$pkg" 2>/dev/null | awk '{print $2}' || true)
                 if [[ -n "$installed" ]]; then
                     echo -e "  ${GREEN}✓${RESET} ${BOLD}$pkg${RESET} ${CYAN}$version${RESET}"
                 else
                     echo -e "    ${BOLD}$pkg${RESET} ${CYAN}$version${RESET}"
                 fi
-                ((count++))
+                ((count++)) || true
             done < <(db_list_all)
             echo
             nex_msg info "Total: $count packages"
