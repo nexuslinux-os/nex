@@ -154,6 +154,7 @@ release=1
 arch=x86_64
 url=https://sw.kovidgoyal.net/kitty/
 license=GPL-3.0
+size=12000000
 depends=fontconfig|freetype2|libxcb|libxkbcommon|wayland|lcms2
 repo=nexuslinux-os/kitty-bin
 asset=kitty-0.36.0-1-x86_64.pkg.tar.zst
@@ -172,7 +173,7 @@ asset=btop-1.4.3-1-x86_64.pkg.tar.zst
 checksum=
 
 name=starship
-desc>Cross-shell prompt
+desc=Cross-shell prompt
 version=1.21.1
 release=1
 arch=x86_64
@@ -209,7 +210,7 @@ asset=ripgrep-14.1.0-1-x86_64.pkg.tar.zst
 checksum=
 
 name=fzf
-desc>Command-line fuzzy finder
+desc=Command-line fuzzy finder
 version=0.54.0
 release=1
 arch=x86_64
@@ -221,7 +222,7 @@ asset=fzf-0.54.0-1-x86_64.pkg.tar.zst
 checksum=
 
 name=eza
-desc>Modern replacement for ls
+desc=Modern replacement for ls
 version=0.20.0
 release=1
 arch=x86_64
@@ -234,7 +235,7 @@ asset=eza-0.20.0-1-x86_64.pkg.tar.zst
 checksum=
 
 name=zoxide
-desc>Smarter cd command
+desc=Smarter cd command
 version=0.9.4
 release=1
 arch=x86_64
@@ -246,7 +247,7 @@ asset=zoxide-0.9.4-1-x86_64.pkg.tar.zst
 checksum=
 
 name=dust
-desc>Intuitive du replacement
+desc=Intuitive du replacement
 version=1.2.0
 release=1
 arch=x86_64

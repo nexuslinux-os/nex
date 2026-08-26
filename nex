@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Detect installation path
+_nex_self="$(readlink -f "$0" 2>/dev/null || echo "$0")"
+NEX_DIR="$(dirname "$_nex_self")"
+
+# Determine lib directory
+if [[ -d "$NEX_DIR/lib" ]]; then
+    NEX_LIB_DIR="$NEX_DIR/lib"
+elif [[ -d "/usr/share/nex/lib" ]]; then
+    NEX_LIB_DIR="/usr/share/nex/lib"
+else
+    echo "error: Cannot find nex library files." >&2
+    exit 1
+fi
+
+# shellcheck source=lib/core.sh
+source "$NEX_LIB_DIR/core.sh"
+# shellcheck source=lib/config.sh
+source "$NEX_LIB_DIR/config.sh"
+# shellcheck source=lib/db.sh
+source "$NEX_LIB_DIR/db.sh"
+# shellcheck source=lib/github.sh
+source "$NEX_LIB_DIR/github.sh"
+# shellcheck source=lib/install.sh
+source "$NEX_LIB_DIR/install.sh"
+# shellcheck source=lib/update.sh
+source "$NEX_LIB_DIR/update.sh"
+# shellcheck source=lib/search.sh
+source "$NEX_LIB_DIR/search.sh"
+# shellcheck source=lib/cache.sh
+source "$NEX_LIB_DIR/cache.sh"
+# shellcheck source=lib/source.sh
+source "$NEX_LIB_DIR/source.sh"
+
+nex_help() {
+    cat <<EOF
+${BOLD}${CYAN}nex${RESET} - Nexus Linux Package Manager (v${NEX_VERSION})
+
+${BOLD}Package Operations:${RESET}
+  ${GREEN}nex${RESET} install <package>      Install a package
+  ${GREEN}nex${RESET} remove <package>       Remove a package
+  ${GREEN}nex${RESET} purge <package>        Remove package and config files
+  ${GREEN}nex${RESET} reinstall <package>    Reinstall a package
+  ${GREEN}nex${RESET} autoremove             Remove unused dependencies
+
+${BOLD}Database:${RESET}
+  ${GREEN}nex${RESET} update                 Update package database
+  ${GREEN}nex${RESET} upgrade                Update and upgrade packages
+
+${BOLD}Search & Info:${RESET}
+  ${GREEN}nex${RESET} search <query>         Search for packages
+  ${GREEN}nex${RESET} show <package>         Show package details
+  ${GREEN}nex${RESET} list installed         List nex-managed packages
+  ${GREEN}nex${RESET} list updates           List available updates
+  ${GREEN}nex${RESET} list allv              List all available packages
+
+${BOLD}Cache:${RESET}
+  ${GREEN}nex${RESET} clean                  Clear package cache
+  ${GREEN}nex${RESET} autoclear              Remove old cached versions
+
+${BOLD}Source:${RESET}
+  ${GREEN}nex${RESET} source <package>       Download package source
+  ${GREEN}nex${RESET} build <package>        Build package from source
+  ${GREEN}nex${RESET} editsource             Edit package sources
+
+${BOLD}Options:${RESET}
+  ${GREEN}nex${RESET} -h, --help             Show this help
+  ${GREEN}nex${RESET} -v, --version          Show version
+EOF
+}
+
+nex_config_load
+
+case "${1:-}" in
+    install)   shift; nex_config_init; nex_dirs_init; nex_install "$@" ;;
+    remove)    shift; nex_remove "$@" ;;
+    purge)     shift; nex_purge "$@" ;;
+    reinstall) shift; nex_config_init; nex_dirs_init; nex_reinstall "$@" ;;
+    autoremove) nex_autoremove ;;
+    update)    nex_config_init; nex_dirs_init; nex_update ;;
+    upgrade)   nex_config_init; nex_dirs_init; nex_upgrade ;;
+    search)    shift; nex_search "$@" ;;
+    show)      shift; nex_show "$@" ;;
+    list)      shift; nex_list "$@" ;;
+    clean)     nex_clean ;;
+    autoclear) nex_autoclear ;;
+    source)    shift; nex_config_init; nex_dirs_init; nex_source "$@" ;;
+    build)     shift; nex_config_init; nex_dirs_init; nex_build "$@" ;;
+    editsource) nex_editsource ;;
+    -h|--help) nex_help ;;
+    -v|--version) echo "nex v${NEX_VERSION}" ;;
+    *)
+        if [[ -z "${1:-}" ]]; then
+            nex_help
+        else
+            nex_msg error "Unknown command: $1"
+            echo "Run 'nex --help' for usage information."
+            exit 1
+        fi
+        ;;
+esac
